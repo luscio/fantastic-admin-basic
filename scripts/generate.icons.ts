@@ -101,7 +101,7 @@ eslint.on('error', (err) => {
 
 eslint.on('close', (code) => {
   if (code !== 0) {
-    p.log.error(`ESLint 执行失败，退出码: ${code}`)
+    p.log.error(`ESLint 执行失败, 退出码: ${code}`)
     process.exit(code)
   }
   spinner.stop('图标集生成完成！')
