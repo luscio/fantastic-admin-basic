@@ -8,7 +8,7 @@ export default defineFakeRoute([
     response: ({ body }) => {
       return {
         error: '',
-        status: 1,
+        status: 0,
         data: {
           account: body.account,
           token: `${body.account}:${faker.internet.jwt()}`,
@@ -37,7 +37,7 @@ export default defineFakeRoute([
       }
       return {
         error: '',
-        status: 1,
+        status: 0,
         data: {
           permissions,
         },
@@ -50,7 +50,7 @@ export default defineFakeRoute([
     response: () => {
       return {
         error: '',
-        status: 1,
+        status: 0,
         data: {
           isSuccess: true,
         },

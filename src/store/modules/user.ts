@@ -25,6 +25,9 @@ export const useUserStore = defineStore(
     async function login(data: {
       account: string
       password: string
+      captcha: string
+      remember: boolean
+      sys_captcha: string
     }) {
       const res = await apiUser.login(data)
       localStorage.setItem('account', res.data.account)

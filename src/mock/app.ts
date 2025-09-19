@@ -7,7 +7,7 @@ export default defineFakeRoute([
     response: () => {
       return {
         error: '',
-        status: 1,
+        status: 0,
         data: [
           {
             meta: {
@@ -88,7 +88,7 @@ export default defineFakeRoute([
     response: () => {
       return {
         error: '',
-        status: 1,
+        status: 0,
         data: [
           {
             meta: {

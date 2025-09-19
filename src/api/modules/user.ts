@@ -5,8 +5,12 @@ export default {
   login: (data: {
     account: string
     password: string
-  }) => api.post('user/login', data, {
-    baseURL: '/mock/',
+    captcha: string
+    remember: boolean
+    sys_captcha: string
+  }) => api.post('/admin-api/login', {
+    ...data,
+    username: data.account,
   }),
 
   // 获取权限
@@ -21,4 +25,7 @@ export default {
   }) => api.post('user/password/edit', data, {
     baseURL: '/mock/',
   }),
+
+  // 获取验证码
+  captcha: () => api.get('/admin-api/captcha'),
 }

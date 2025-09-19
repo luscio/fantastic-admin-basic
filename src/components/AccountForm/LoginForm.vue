@@ -2,6 +2,7 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
+import apiUser from '@/api/modules/user'
 import { FormControl, FormField, FormItem, FormMessage } from '@/ui/shadcn/ui/form'
 
 defineOptions({
@@ -27,11 +28,17 @@ const form = useForm({
   validationSchema: toTypedSchema(z.object({
     account: z.string().min(1, '请输入用户名'),
     password: z.string().min(1, '请输入密码'),
+    captcha: z.string().min(1, '请输入验证码'),
+    captcha_img: z.string(),
+    sys_captcha: z.string(),
     remember: z.boolean(),
   })),
   initialValues: {
     account: props.account ?? localStorage.getItem('login_account') ?? '',
     password: '',
+    captcha: '',
+    captcha_img: '',
+    sys_captcha: '',
     remember: !!localStorage.getItem('login_account'),
   },
 })
@@ -49,6 +56,19 @@ const onSubmit = form.handleSubmit((values) => {
     loading.value = false
   })
 })
+
+onBeforeMount(() => {
+  refreshCaptcha()
+})
+
+async function refreshCaptcha() {
+  loading.value = true
+  const res = await apiUser.captcha()
+  form.setFieldValue('captcha', '')
+  form.setFieldValue('captcha_img', res.data.captcha_img)
+  form.setFieldValue('sys_captcha', res.data.sys_captcha)
+  loading.value = false
+}
 
 function testAccount(account: string) {
   form.setFieldValue('account', account)
@@ -89,6 +109,19 @@ function testAccount(account: string) {
             </Transition>
           </FormItem>
         </FormField>
+        <div class="flex-start-between gap-2">
+          <FormField v-slot="{ componentField, errors }" name="captcha">
+            <FormItem class="relative pb-6 space-y-0">
+              <FormControl>
+                <FaInput type="captcha" placeholder="请输入验证码" class="w-full" :class="errors.length && 'border-destructive'" v-bind="componentField" />
+              </FormControl>
+              <Transition enter-active-class="transition-opacity" enter-from-class="opacity-0" leave-active-class="transition-opacity" leave-to-class="opacity-0">
+                <FormMessage class="absolute bottom-1 text-xs" />
+              </Transition>
+            </FormItem>
+          </FormField>
+          <ElImage v-loading="loading" :src="form.values.captcha_img" class="hover:cursor-pointer" @click="refreshCaptcha" />
+        </div>
         <div class="mb-4 flex-center-between">
           <div class="flex-center-start">
             <FormField v-slot="{ componentField }" type="checkbox" name="remember">
@@ -115,7 +148,7 @@ function testAccount(account: string) {
           </FaButton>
         </div>
       </form>
-      <div class="mt-4 text-center -mb-4">
+      <div class="mt-4 hidden text-center -mb-4">
         <FaDivider>演示账号一键登录</FaDivider>
         <div class="space-x-2">
           <FaButton variant="default" size="sm" plain @click="testAccount('admin')">
