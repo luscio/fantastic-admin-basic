@@ -26,7 +26,7 @@ api.interceptors.request.use(
     // 设置请求头
     if (request.headers) {
       if (userStore.isLogin) {
-        request.headers.Token = userStore.token
+        request.headers.authorization = `Bearer ${userStore.token}`
       }
     }
     return request
