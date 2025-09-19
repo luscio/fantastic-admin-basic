@@ -8,8 +8,8 @@ import fs from 'fs-extra'
 // 拿到全部图标集的原始数据
 const raw = await lookupCollections()
 
-let lastChoose = fs.readFileSync(path.resolve(process.cwd(), 'src/iconify/index.json'), 'utf-8')
-lastChoose = JSON.parse(lastChoose)
+const _lastChoose = fs.readFileSync(path.resolve(process.cwd(), 'src/iconify/index.json'), 'utf-8')
+const lastChoose = JSON.parse(_lastChoose)
 
 // 取出可使用的图标集数据用于选择，并按名称排序
 const collections = Object.entries(raw).map(([id, item]) => ({

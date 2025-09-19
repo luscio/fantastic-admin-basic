@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'qs'
 import { toast } from 'vue-sonner'
 
 // 请求重试配置
@@ -29,12 +28,6 @@ api.interceptors.request.use(
       if (userStore.isLogin) {
         request.headers.Token = userStore.token
       }
-    }
-    // 是否将 POST 请求参数进行字符串化处理
-    if (request.method === 'post') {
-      request.data = qs.stringify(request.data, {
-        arrayFormat: 'brackets',
-      })
     }
     return request
   },
